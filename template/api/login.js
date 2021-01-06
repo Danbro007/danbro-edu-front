@@ -1,12 +1,21 @@
 import request from '@/utils/request'
 
 export default {
-    //根据手机号发验证码
-  login(user) {
+    //登录的方法
+  submitLoginUser(userInfo) {
     return request({
       url: `/user/login`,
       method: 'post',
-      data:user
+      data: userInfo
+    })
+  },
+
+  //根据token获取用户信息
+  getLoginUserInfo() {
+    return request({
+      url: `/user/info`,
+      method: 'get'
     })
   }
+
 }
