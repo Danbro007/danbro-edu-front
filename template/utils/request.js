@@ -9,7 +9,6 @@ const service = axios.create({
 // http request 拦截器
 service.interceptors.request.use(
   config => {
-    //debugger
     if (cookie.get('guli_token')) {
       config.headers['token'] = cookie.get('guli_token');
     }
@@ -18,6 +17,7 @@ service.interceptors.request.use(
   err => {
     return Promise.reject(err);
   })
+
 
 export default service
 
