@@ -136,8 +136,16 @@
                                   target="_blank"
                                 >
                                   <span class="fr">
-                                    <i class="free-icon vam mr10" v-if="video.isFree">免费试听</i>
-                                    <i class="free-icon vam mr10"  v-if="!video.isFree">收费</i>
+                                    <i
+                                      class="free-icon vam mr10"
+                                      v-if="video.isFree"
+                                      >免费试听</i
+                                    >
+                                    <i
+                                      class="free-icon vam mr10"
+                                      v-if="!video.isFree"
+                                      >收费</i
+                                    >
                                   </span>
                                   <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em
                                   >{{ video.videoTitle }}
@@ -192,18 +200,198 @@
       </div>
     </section>
     <!-- /课程详情 结束 -->
+    <!--评论区-->
+    <div class="mt50 commentHtml">
+      <div>
+        <h6 class="c-c-content c-infor-title" id="i-art-comment">
+          <span class="commentTitle">课程评论</span>
+        </h6>
+        <section class="lh-bj-list pr mt20 replyhtml">
+          <ul>
+            <li class="unBr">
+              <aside class="noter-pic">
+                <img
+                  width="50"
+                  height="50"
+                  class="picImg"
+                  src="https://edu-danbro.oss-cn-hangzhou.aliyuncs.com/avatar/2020/12/17/63c48ff0d6814c17a7f0fd77b5e215c0-file.png
+"
+                />
+              </aside>
+              <div class="of">
+                <section class="n-reply-wrap">
+                  <fieldset>
+                    <textarea
+                      name=""
+                      v-model="comment.content"
+                      placeholder="输入您要评论的文字"
+                      id="commentContent"
+                    ></textarea>
+                  </fieldset>
+                  <p class="of mt5 tar pl10 pr10">
+                    <span class="fl"
+                      ><tt
+                        class="c-red commentContentmeg"
+                        style="display: none"
+                      ></tt
+                    ></span>
+                    <input
+                      type="button"
+                      @click="addComment()"
+                      value="回复"
+                      class="lh-reply-btn"
+                    />
+                  </p>
+                </section>
+              </div>
+            </li>
+          </ul>
+        </section>
+        <section class="">
+          <section class="question-list lh-bj-list pr">
+            <ul class="pr10">
+              <li v-for="(comment, index) in data.items" v-bind:key="index">
+                <aside class="noter-pic">
+                  <img
+                    width="50"
+                    height="50"
+                    class="picImg"
+                    :src="comment.avatar"
+                  />
+                </aside>
+                <div class="of">
+                  <span class="fl">
+                    <font class="fsize12 c-blue">{{ comment.nickname }}</font>
+                    <font class="fsize12 c-999 ml5">评论：</font>
+                  </span>
+                </div>
+                <div class="noter-txt mt5">
+                  <p>{{ comment.content }}</p>
+                </div>
+                <div class="of mt5">
+                  <span class="fr"
+                    ><font class="fsize12 c-999 ml5">{{
+                      comment.gmtCreate
+                    }}</font></span
+                  >
+                </div>
+              </li>
+            </ul>
+          </section>
+        </section>
+        <!-- 公共分页 开始 -->
+        <div class="paging">
+          <!-- undisable这个class是否存在，取决于数据属性hasPrevious -->
+          <a
+            :class="{ undisable: !data.hasPrevious }"
+            href="#"
+            title="首页"
+            @click.prevent="gotoPage(1)"
+            >首</a
+          >
+          <a
+            :class="{ undisable: !data.hasPrevious }"
+            href="#"
+            title="前一页"
+            @click.prevent="gotoPage(data.current - 1)"
+            >&lt;</a
+          >
+          <a
+            v-for="page in data.pages"
+            :key="page"
+            :class="{
+              current: data.current == page,
+              undisable: data.current == page,
+            }"
+            :title="'第' + page + '页'"
+            href="#"
+            @click.prevent="gotoPage(page)"
+            >{{ page }}</a
+          >
+          <a
+            :class="{ undisable: !data.hasNext }"
+            href="#"
+            title="后一页"
+            @click.prevent="gotoPage(data.current + 1)"
+            >&gt;</a
+          >
+          <a
+            :class="{ undisable: !data.hasNext }"
+            href="#"
+            title="末页"
+            @click.prevent="gotoPage(data.pages)"
+            >末</a
+          >
+          <div class="clear" />
+        </div>
+        <!-- 公共分页 结束 -->
+      </div>
+    </div>
   </div>
+  <!--课程评论-->
 </template>
 
 <script>
+import "~/assets/img/avatar-boy.gif";
 import courseApi from "@/api/course";
+import commentApi from "@/api/commonedu";
 export default {
   asyncData({ params, error }) {
-    return courseApi.getCourseInfo(params.id).then((response) => {
-      return {
-        courseWebVo: response.data.data.courseInfo
-      };
-    });
+    return { courseId: params.id };
+  },
+  data() {
+    return {
+      data: {},
+      page: 1,
+      limit: 4,
+      total: 10,
+      comment: {
+        content: "",
+        courseId: "",
+        teacherId:""
+        
+      },
+      isbuyCourse: false,
+      courseWebVo: {},
+      courseId:"",
+    };
+  },
+  created() {
+     this.initCourseInfo(),
+     this.initComment();
+  },
+  methods: {
+    //获取课程详情
+    initCourseInfo() {
+      courseApi.getCourseInfo(this.courseId).then((response) => {
+        this.courseWebVo = response.data.data.courseInfo;
+        this.isbuyCourse = response.data.data.isbuyCourse;
+      });
+    },
+    initComment() {
+      commentApi
+        .getPageList(this.page, this.limit, this.courseId)
+        .then((response) => {
+          this.data = response.data.data.commentInfo;
+        });
+    },
+    addComment() {
+      this.comment.courseId = this.courseId;
+      this.comment.teacherId = this.courseWebVo.teacherId;
+      commentApi.addComment(this.comment).then((response) => {
+        if (response.data.success) {
+          this.comment.content = "";
+          this.initComment();
+        }
+      });
+    },
+    gotoPage(page) {
+      commentApi
+        .getPageList(page, this.limit, this.courseId)
+        .then((response) => {
+          this.data = response.data.data.commentInfo;
+        });
+    },
   },
 };
 </script>
