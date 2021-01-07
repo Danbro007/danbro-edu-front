@@ -49,19 +49,20 @@
           </section>
           <section class="fl">
             <ol class="js-tap clearfix">
-             <li :class="{'current bg-orange':buyCountSort!=''}">
-                <a title="销量" href="javascript:void(0);" @click="searchBuyCount()">销量
-                <span :class="{hide:buyCountSort==''}">↓</span>
+
+              <li :class="{'current bg-orange':searchObj.sortType=='price'}">
+                <a title="价格" href="javascript:void(0);" @click="searchPrice()">价格
+                  <span :class="{hide:searchObj.sortType!='price'}">↓</span>
                 </a>
               </li>
-              <li :class="{'current bg-orange':gmtCreateSort!=''}">
+             <li :class="{'current bg-orange':searchObj.sortType=='gmt_create'}">
                 <a title="最新" href="javascript:void(0);" @click="searchGmtCreate()">最新
-                <span :class="{hide:gmtCreateSort==''}">↓</span>
+                <span :class="{hide:searchObj.sortType!='gmt_create'}">↓</span>
                 </a>
               </li>
-              <li :class="{'current bg-orange':priceSort!=''}">
-                <a title="价格" href="javascript:void(0);" @click="searchPrice()">价格&nbsp;
-                  <span :class="{hide:priceSort==''}">↓</span>
+              <li :class="{'current bg-orange':searchObj.sortType=='buy_count'}">
+                <a title="销量" href="javascript:void(0);" @click="searchBuyCount()">销量
+                <span :class="{hide:searchObj.sortType!='buy_count'}">↓</span>
                 </a>
               </li>
             </ol>
@@ -154,13 +155,13 @@ export default {
       subjectNestedList: [], // 一级分类列表
       subSubjectList: [], // 二级分类列表
 
-      searchObj: {}, // 查询表单对象
+      searchObj: {
+        sortType:""
+      }, // 查询表单对象
 
       oneIndex:-1,
       twoIndex:-1,
-      buyCountSort:"",
-      gmtCreateSort:"",
-      priceSort:""
+      
     }
   },
   created() {
@@ -232,48 +233,21 @@ export default {
 
     //6 根据销量排序
     searchBuyCount() {
-      //设置对应变量值，为了样式生效
-      this.buyCountSort = "buy_count"
-      this.gmtCreateSort = ""
-      this.priceSort = ""
-
-      //把值赋值到searchObj
-      this.searchObj.buyCountSort = this.buyCountSort
-      this.searchObj.gmtCreateSort = this.gmtCreateSort;
-      this.searchObj.priceSort = this.priceSort;
-
+      this.searchObj.sortType = "buy_count"
       //调用方法查询
       this.gotoPage(1)
     },
 
     //7 最新排序
     searchGmtCreate() {
-      //设置对应变量值，为了样式生效
-      this.buyCountSort = ""
-      this.gmtCreateSort = "gmt_create"
-      this.priceSort = ""
-
-      //把值赋值到searchObj
-      this.searchObj.buyCountSort = this.buyCountSort
-      this.searchObj.gmtCreateSort = this.gmtCreateSort;
-      this.searchObj.priceSort = this.priceSort;
-
+      this.searchObj.sortType = "gmt_create"
       //调用方法查询
       this.gotoPage(1)
     },
 
     //8 价格排序
     searchPrice() {
-      //设置对应变量值，为了样式生效
-      this.buyCountSort = ""
-      this.gmtCreateSort = ""
-      this.priceSort = "price"
-
-      //把值赋值到searchObj
-      this.searchObj.buyCountSort = this.buyCountSort
-      this.searchObj.gmtCreateSort = this.gmtCreateSort;
-      this.searchObj.priceSort = this.priceSort;
-
+      this.searchObj.sortType = "price"
       //调用方法查询
       this.gotoPage(1)
     }
