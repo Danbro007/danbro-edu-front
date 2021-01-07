@@ -26,7 +26,7 @@ export default {
   //课程详情的方法
   getCourseInfo(id) {
     return request({
-      url: '/eduservice/coursefront/getFrontCourseInfo/' + id,
+      url: 'edu/front/course/' + id,
       method: 'get'
     })
   }
