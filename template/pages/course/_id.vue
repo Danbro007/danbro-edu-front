@@ -15,6 +15,7 @@
         <article class="c-v-pic-wrap" style="height: 357px">
           <section class="p-h-video-box" id="videoPlay">
             <img
+              height="357px"
               :src="courseWebVo.courseCover"
               :alt="courseWebVo.courseTitle"
               class="dis c-v-pic"
@@ -63,7 +64,7 @@
               <aside>
                 <span class="c-fff f-fM">课时数</span>
                 <br />
-                <h6 class="c-fff f-fM mt10">20</h6>
+                <h6 class="c-fff f-fM mt10">{{courseWebVo.lessonNum}}</h6>
               </aside>
             </li>
             <li>
@@ -71,7 +72,7 @@
               <aside>
                 <span class="c-fff f-fM">浏览数</span>
                 <br />
-                <h6 class="c-fff f-fM mt10">501</h6>
+                <h6 class="c-fff f-fM mt10">{{courseWebVo.viewCount}}</h6>
               </aside>
             </li>
           </ol>
