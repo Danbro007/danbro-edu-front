@@ -206,7 +206,7 @@
         <h6 class="c-c-content c-infor-title" id="i-art-comment">
           <span class="commentTitle">课程评论</span>
         </h6>
-        <section class="lh-bj-list pr mt20 replyhtml">
+        <section v-if="isLogin" class="lh-bj-list pr mt20 replyhtml">
           <ul>
             <li class="unBr">
               <aside class="noter-pic">
@@ -214,8 +214,7 @@
                   width="50"
                   height="50"
                   class="picImg"
-                  src="https://edu-danbro.oss-cn-hangzhou.aliyuncs.com/avatar/2020/12/17/63c48ff0d6814c17a7f0fd77b5e215c0-file.png
-"
+                  :src="userInfo.avatar"
                 />
               </aside>
               <div class="of">
@@ -335,6 +334,9 @@
 import "~/assets/img/avatar-boy.gif";
 import courseApi from "@/api/course";
 import commentApi from "@/api/commonedu";
+import loginApi from "@/api/login";
+import cookie from "js-cookie";
+
 export default {
   asyncData({ params, error }) {
     return { courseId: params.id };
@@ -348,17 +350,17 @@ export default {
       comment: {
         content: "",
         courseId: "",
-        teacherId:""
-        
+        teacherId: "",
       },
       isbuyCourse: false,
       courseWebVo: {},
-      courseId:"",
+      courseId: "",
+      userInfo: {},
+      isLogin: false,
     };
   },
   created() {
-     this.initCourseInfo(),
-     this.initComment();
+    this.initCourseInfo(), this.initComment(), this.showInfo();
   },
   methods: {
     //获取课程详情
@@ -379,7 +381,7 @@ export default {
       this.comment.courseId = this.courseId;
       this.comment.teacherId = this.courseWebVo.teacherId;
       commentApi.addComment(this.comment).then((response) => {
-        if (response.data.success) {
+        if (response.data.isSuccess) {
           this.comment.content = "";
           this.initComment();
         }
@@ -391,6 +393,18 @@ export default {
         .then((response) => {
           this.data = response.data.data.commentInfo;
         });
+    },
+    //创建方法，从cookie获取用户信息
+    showInfo() {
+      //从cookie获取用户信息
+      var userStr = cookie.get("guli_ucenter");
+      // 把字符串转换json对象(js对象)
+      if (userStr) {
+        this.userInfo = JSON.parse(userStr);
+        this.isLogin = true;
+      } else {
+        (this.userInfo = {}), (this.isLogin = false);
+      }
     },
   },
 };
