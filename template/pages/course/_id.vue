@@ -367,15 +367,14 @@ export default {
     //获取课程详情
     initCourseInfo() {
       courseApi.getCourseInfo(this.courseId).then((response) => {
-        this.courseWebVo = response.data.data.courseInfo;
-        this.isbuyCourse = response.data.data.isbuyCourse;
+        this.courseWebVo = response.data.data;
       });
     },
     initComment() {
       commentApi
         .getPageList(this.page, this.limit, this.courseId)
         .then((response) => {
-          this.data = response.data.data.commentInfo;
+          this.data = response.data.data;
         });
     },
     addComment() {
@@ -392,7 +391,7 @@ export default {
       commentApi
         .getPageList(page, this.limit, this.courseId)
         .then((response) => {
-          this.data = response.data.data.commentInfo;
+          this.data = response.data.data;
         });
     },
     //创建方法，从cookie获取用户信息

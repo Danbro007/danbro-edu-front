@@ -102,7 +102,7 @@ export default {
   asyncData({ params, error }) {
     return teacherApi.getTeacherList(1,8).then(response => {
           //this.data = response.data.data
-          return { data: response.data.data.data }
+          return { data: response.data.data }
        })
   },
   methods:{
@@ -111,7 +111,7 @@ export default {
     gotoPage(page) {
       teacherApi.getTeacherList(page,8)
         .then(response => {
-          this.data = response.data.data.data
+          this.data = response.data.data
         })
     }
   }

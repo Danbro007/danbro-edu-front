@@ -174,7 +174,7 @@ export default {
     //1 查询第一页数据
     initCourseFirst() {
       courseApi.getCourseList(1,8,this.searchObj).then(response => {
-        this.data = response.data.data.courseList
+        this.data = response.data.data
       })
     },
 
@@ -182,7 +182,7 @@ export default {
     initSubject() {
       courseApi.getAllSubject()
         .then(response => {
-          this.subjectNestedList = response.data.data.subSubjectList
+          this.subjectNestedList = response.data.data
         })
     },
     

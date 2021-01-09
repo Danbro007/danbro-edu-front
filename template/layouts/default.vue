@@ -186,8 +186,8 @@ export default {
       console.log("=====" + cookie.get("guli_token"));
       //调用接口，根据token值获取用户信息
       loginApi.getLoginUserInfo().then((response) => {
-        console.log("################" + response.data.data.userInfo);
-        this.loginInfo = response.data.data.userInfo;
+        console.log("################" + response.data.data);
+        this.loginInfo = response.data.data;
         cookie.set("guli_ucenter", this.loginInfo, { domain: "localhost" });
       });
     },
