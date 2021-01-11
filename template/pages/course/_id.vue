@@ -45,7 +45,7 @@
               </span>
             </section>
             <section class="c-attr-mt">
-              <a href="#" title="立即观看" class="comm-btn c-btn-3">立即观看</a>
+              <a @click="createOrders()" href="#" title="立即购买" class="comm-btn c-btn-3">立即购买</a>
             </section>
           </section>
         </aside>
@@ -337,6 +337,7 @@ import courseApi from "@/api/course";
 import commentApi from "@/api/commonedu";
 import loginApi from "@/api/login";
 import cookie from "js-cookie";
+import ordersApi from '@/api/orders'
 
 export default {
   asyncData({ params, error }) {
@@ -406,6 +407,16 @@ export default {
         (this.userInfo = {}), (this.isLogin = false);
       }
     },
+    //生成订单
+     createOrders() {
+       debugger
+       ordersApi.createOrders(this.courseId)
+        .then(response => {
+          //获取返回订单号
+          //生成订单之后，跳转订单显示页面
+          this.$router.push({path:'/orders/'+response.data.data.orderNo})
+        })
+     }
   },
 };
 </script>
