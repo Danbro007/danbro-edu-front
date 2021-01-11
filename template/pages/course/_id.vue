@@ -44,8 +44,20 @@
                 <a class="c-fff vam" title="收藏" href="#">收藏</a>
               </span>
             </section>
-            <section class="c-attr-mt">
-              <a @click="createOrders()" href="#" title="立即购买" class="comm-btn c-btn-3">立即购买</a>
+            <section
+              v-if="isbuyCourse || Number(courseWebVo.coursePrice) === 0"
+              class="c-attr-mt"
+            >
+              <a href="#" title="立即观看" class="comm-btn c-btn-3">立即观看</a>
+            </section>
+            <section v-else class="c-attr-mt">
+              <a
+                @click="createOrders()"
+                href="#"
+                title="立即购买"
+                class="comm-btn c-btn-3"
+                >立即购买</a
+              >
             </section>
           </section>
         </aside>
@@ -64,7 +76,7 @@
               <aside>
                 <span class="c-fff f-fM">课时数</span>
                 <br />
-                <h6 class="c-fff f-fM mt10">{{courseWebVo.lessonNum}}</h6>
+                <h6 class="c-fff f-fM mt10">{{ courseWebVo.lessonNum }}</h6>
               </aside>
             </li>
             <li>
@@ -72,7 +84,7 @@
               <aside>
                 <span class="c-fff f-fM">浏览数</span>
                 <br />
-                <h6 class="c-fff f-fM mt10">{{courseWebVo.viewCount}}</h6>
+                <h6 class="c-fff f-fM mt10">{{ courseWebVo.viewCount }}</h6>
               </aside>
             </li>
           </ol>
@@ -337,7 +349,7 @@ import courseApi from "@/api/course";
 import commentApi from "@/api/commonedu";
 import loginApi from "@/api/login";
 import cookie from "js-cookie";
-import ordersApi from '@/api/orders'
+import ordersApi from "@/api/orders";
 
 export default {
   asyncData({ params, error }) {
@@ -362,7 +374,10 @@ export default {
     };
   },
   created() {
-    this.initCourseInfo(), this.initComment(), this.showInfo();
+    this.initCourseInfo(),
+      this.initComment(),
+      this.showInfo(),
+      this.checkCourseIsBuy();
   },
   methods: {
     //获取课程详情
@@ -408,14 +423,20 @@ export default {
       }
     },
     //生成订单
-     createOrders() {
-       ordersApi.createOrders(this.courseId)
-        .then(response => {
-          //获取返回订单号
-          //生成订单之后，跳转订单显示页面
-          this.$router.push({path:'/orders/'+response.data.data.orderNo})
-        })
-     }
+    createOrders() {
+      ordersApi.createOrders(this.courseId).then((response) => {
+        //获取返回订单号
+        //生成订单之后，跳转订单显示页面
+        this.$router.push({ path: "/orders/" + response.data.data.orderNo });
+      });
+    },
+    checkCourseIsBuy() {
+      courseApi.checkOrderInfo(this.courseId).then((response) => {
+        if (response.data.data.status) {
+          this.isbuyCourse = true;
+        }
+      });
+    },
   },
 };
 </script>

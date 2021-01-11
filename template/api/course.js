@@ -29,8 +29,14 @@ export default {
       url: 'edu/front/course/' + id,
       method: 'get'
     })
-  }
+  },
 
+  checkOrderInfo(courseId) {
+    return request({
+      url: 'edu/front/course/order/' + courseId,
+      method: 'get'
+    })
+  }
 }
 
 

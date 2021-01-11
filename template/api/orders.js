@@ -30,5 +30,7 @@ export default {
       url: '/order/pay/status/'+orderNo,
       method: 'get'
     })
-  }
+  },
+
+  
 }
