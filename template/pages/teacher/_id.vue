@@ -54,7 +54,7 @@
                   <section class="course-img">
                     <img :src="course.courseCover" class="img-responsive" >
                     <div class="cc-mask">
-                      <a href="course/" + course.courseId title="开始学习" target="_blank" class="comm-btn c-btn-1">开始学习</a>
+                      <a href="#" title="开始学习" target="_blank" class="comm-btn c-btn-1">开始学习</a>
                     </div>
                   </section>
                   <h3 class="hLh30 txtOf mt10">
@@ -75,6 +75,11 @@
 <script>
 import teacherApi from '@/api/teacher'
 export default {
+  data() {
+    return {
+      BASE_API:""
+    };
+  },
   //params.id获取路径id值
   asyncData({ params, error }) {
     return teacherApi.getTeacherInfo(params.id)
@@ -83,7 +88,6 @@ export default {
           teacher: response.data.data
         }
       })
-  }
-
-};
+  },
+}
 </script>

@@ -409,7 +409,6 @@ export default {
     },
     //生成订单
      createOrders() {
-       debugger
        ordersApi.createOrders(this.courseId)
         .then(response => {
           //获取返回订单号

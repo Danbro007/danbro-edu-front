@@ -18,7 +18,7 @@ export default {
   //生成二维码的方法
   createNatvie(orderNo) {
     return request({
-      url: '/order/qrcode/wechat/'+orderNo,
+      url: '/order/pay/qrcode/'+orderNo,
       method: 'get'
     })
   },
@@ -27,7 +27,7 @@ export default {
   //生成二维码的方法
   queryPayStatus(orderNo) {
     return request({
-      url: '/order/pay/status'+orderNo,
+      url: '/order/pay/status/'+orderNo,
       method: 'get'
     })
   }
